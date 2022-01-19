@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*- 
+
 """Generate forms for human evaluation."""
 
 from jinja2 import FileSystemLoader, Environment

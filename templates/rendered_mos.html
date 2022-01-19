@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>MOS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
+        integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            
+    <h1 class="display-4">Mean Opinion Score(MOS) Evaluation System</h1>
+    <p class="lead">This page is used to operate crowdsourcing for evaluating Multi-TTS models</p>
+    <hr class="my-4">
+    <!-- <p>
+        感謝您參與本次實驗！
+    </p> -->
+    <p>
+        The mean opinion score(MOS) consists of 5 scales：
+        <ul>
+            <li>１（terrible): terrible quality, cannot hear anything</li>
+            <li>２（not good): bad quality, hears some words but still sounds unaturally</li>
+            <li>３ (moderate）: moderate quality, hears utterance clearly, but the prosody and accent of syntheic audio are different comparing with reference audio</li>
+            <li>４ (good）: good quality, hears utterance clearly and the prosody and accent of synthetic audio are partially similar with reference audio</li>
+            <li>５ (perfect）: perfect quality, hears utterance clearly, and the synthetic audio sounds like reference audio</li>
+        </ul>
+    </p>
+
+        </div>
+    </div>
+
+    <div class="container" id="form_container">
+        <form id="theForm" action="{{ url_for('submit') }}" method="POST" onsubmit="return preventRepeatedSubmission();">
+            <!-- <div class="form-group">
+                <label for="name">Your name：</label>
+                <input class="form-control" type="text" inputmode="text" name="name" required>
+                <small class="form-text text-muted">必填*</small>
+             </div> --> 
+            <div class="form-group">
+                <label for="gender">Gender：</label>
+                <input class="form-control" type="text" inputmode="gender" placeholder="" name="gender">
+                <!-- <small class="form-text text-muted">如果中獎，我們將以電子郵件通知您</small> -->
+            </div>
+            <div class="form-group">
+                <label for="Age">Age：</label>
+                <input class="form-control" type="text" inputmode="Age" placeholder="" name="age">
+            </div>
+            
+        {% for item in items %}
+
+        <div class="card form-group">
+            <div class="card-header">Sample {{item[0]}}</div>
+            <div class="card-body">
+                <br>Referecen audio: </br>
+                <p>
+                    <audio controls src="{{ url_for('static', filename=item[1]) }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                </p>
+                <br>Synthetic audio: </br>
+                <p>
+                    <audio controls src="{{ url_for('static', filename=item[2]) }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                </p>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q{{ item[0] }}" id="q{{ item }}_1" value="5" required>
+                    <label class="form-check-label" for="q1_1">５（perfect）</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q{{ item[0] }}" id="q{{ item }}_2" value="4" required>
+                    <label class="form-check-label" for="q1_2">４（good）</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q{{ item[0] }}" id="q{{ item }}_3" value="3" required>
+                    <label class="form-check-label" for="q1_3">３（moderate）</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q{{ item[0] }}" id="q{{ item }}_4" value="2" required>
+                    <label class="form-check-label" for="q1_4">２（not good）</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="q{{ item[0] }}" id="q{{ item }}_5" value="1" required>
+                    <label class="form-check-label" for="q1_5">１（terrible）</label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+            <input type="text" name="model" value="{{model }}" hidden>
+            <input type="text" name="thank" value="Thanks！" hidden>
+            <input class="btn btn-info btn-lg" type="submit" value="submit" id="submitBtn">
+            <!-- <p class="text-muted">
+                <small>如果提交結果時發現繳不出去，請回頭檢查是否有填入姓名、是否每一題都有作答到，謝謝。</small>
+            </p> -->
+        </form>
+    </div>
+
+    <!-- <div class="container" style="padding-top: 60px;">
+        <p class="text-center text-muted">&copy; 台大語音實驗室</p>
+    </div> -->
+
+    <script type="text/javascript">
+        function preventRepeatedSubmission() {
+            document.getElementById('submitBtn').disabled = true;
+            setTimeout("submitBtn.disabled=false;", 5000);
+            return true;
+        };
+    </script>
+</body>
+
+</html>
